@@ -20,33 +20,35 @@ class VkHandler:
         pattern = r'_[0-9]+$'
         # 'https://vk.com/album-47985581_237024723'
 
+        albums = {}
         album_link = input('Введите ссылку на альбом: ')
-        album_id = re.search(pattern, album_link).group()[1:]
-        album_info = self.__vk_api.photos.getAlbums(v='5.0', owner_id=-47985581, album_ids=album_id)
+        while album_link:
+            album_id = re.search(pattern, album_link).group()[1:]
+            album_info = self.__vk_api.photos.getAlbums(v='5.0', owner_id=-47985581, album_ids=album_id)
 
-        stop_album = StopAlbum(album_info['items'][0]['title'], album_link, 1)
-        db_session.add(stop_album)
-        db_session.commit()
-
-        with open('first_topic_text.txt', 'r') as f:
-            f.read().rstrip()
+            stop_album = StopAlbum(album_info['items'][0]['title'], album_link, 1)
+            db_session.add(stop_album)
+            db_session.commit()
+            albums[stop_album.link] = stop_album.name
+            album_link = input('Введите ссылку на альбом: ')
 
         q_first_text = db_session.query(TopicMessage).filter_by(id=1).first()
         first_text = q_first_text.text
-        album = '{}: {}'.format(stop_album.name, stop_album.link)
-        text = first_text + '\n' + album
 
-        return text
+        for k, v in albums.items():
+            first_text += '\n{}: {}'.format(v, k)
+
+        return first_text
 
     def create_new_topic(self):
         topic_title = input('Название списка: ')
         first_text = self.create_first_topic_msg()
-        new_topic = self.__vk_api.board.addTopic(v='5.0', group_id=47985581,
+        return self.__vk_api.board.addTopic(v='5.0', group_id=47985581,
                                           title=topic_title, text=first_text,
                                           from_group=1)
-        print(new_topic)
 
 
 if __name__ == '__main__':
     vk_handler = VkHandler(MY_USER_ID, APP_ID)
     vk_handler.create_new_topic()
+    db_session.close()
