@@ -20,6 +20,8 @@ class VkHandler:
         self.__vk_api = vk.API(self.__vk_session, timeout=30)
 
     def create_first_topic_msg(self):
+        # ----> Позже сделать на django формах
+
         pattern = r'_[0-9]+$'
         # 'https://vk.com/album-47985581_237024723'
 
@@ -51,10 +53,13 @@ class VkHandler:
                                           from_group=1)
 
     def add_payment_info_in_topic(self, topic_id):
-        id = input('Введите id платежной информации (1 или 2): ')
+        # ----> Позже сделать на django формах
 
-        q_message = db_session.query(PaymentInfo).filter_by(id=id).first()
-        message = '{}\n\nРЕКВИЗИТЫ\nПолучатель: {}\n№ карты: {}\n{}\n\n{}'.format(q_message.first_msg, q_message.recipient, q_message.card_number,
+        pay_id = input('Введите id платежной информации (1 или 2): ')
+
+        q_message = db_session.query(PaymentInfo).filter_by(id=pay_id).first()
+        message = '{}\n\nРЕКВИЗИТЫ\nПолучатель: {}\n№ карты: {}\n{}\n\n{}'.format(q_message.first_msg, q_message.recipient,
+                                                                                  q_message.card_number,
                                                                                   q_message.card_type, q_message.end_msg)
 
         self.__vk_api.board.createComment(v='5.0', group_id=47985581,
@@ -63,6 +68,8 @@ class VkHandler:
 
     @staticmethod
     def create_new_payment_info():
+        # ----> Позже сделать на django формах
+
         first_msg = input('Текст заголовка: ')
         recipient = input('ФИО владельца карты: ')
         card_number = input('Номер карты: ')
@@ -74,11 +81,12 @@ class VkHandler:
 
     def get_all_album_comments(self):
         comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
-        return comments
+        for i in comments['items']:
+            print(i)
 
 
 if __name__ == '__main__':
     vk_handler = VkHandler(MY_USER_ID, APP_ID)
     # vk_handler.add_payment_info_in_topic(37515920)
     # db_session.close()
-    print(vk_handler.get_all_album_comments())
+    vk_handler.get_all_album_comments()
