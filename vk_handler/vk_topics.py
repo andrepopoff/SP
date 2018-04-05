@@ -12,7 +12,7 @@ class VkHandler:
         self.__my_user_id = my_user_id
         self.__app_id = app_id
 
-        self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login='andre-popoff@mail.ru', user_password='Lub08m270388',
+        self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login='//', user_password='//',
                                     scope='groups')
         self.__vk_api = vk.API(self.__vk_session, timeout=30)
 
