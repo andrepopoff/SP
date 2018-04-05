@@ -16,7 +16,7 @@ class VkHandler:
             self.__login, self.__password = [line.rstrip() for line in f]
 
         self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login=self.__login, user_password=self.__password,
-                                    scope='groups')
+                                    scope='groups, photos')
         self.__vk_api = vk.API(self.__vk_session, timeout=30)
 
     def create_first_topic_msg(self):
@@ -72,8 +72,13 @@ class VkHandler:
         pay_info = PaymentInfo(first_msg, recipient, card_number, card_type, end_msg)
         pay_info.save_in_db()
 
+    def get_all_album_comments(self):
+        comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
+        return comments
+
 
 if __name__ == '__main__':
     vk_handler = VkHandler(MY_USER_ID, APP_ID)
-    vk_handler.add_payment_info_in_topic(37515920)
-    db_session.close()
+    # vk_handler.add_payment_info_in_topic(37515920)
+    # db_session.close()
+    print(vk_handler.get_all_album_comments())
