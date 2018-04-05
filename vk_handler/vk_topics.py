@@ -12,7 +12,10 @@ class VkHandler:
         self.__my_user_id = my_user_id
         self.__app_id = app_id
 
-        self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login='//', user_password='//',
+        with open('pass.txt', 'r') as f:
+            self.__login, self.__password = [line.rstrip() for line in f]
+
+        self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login=self.__login, user_password=self.__password,
                                     scope='groups')
         self.__vk_api = vk.API(self.__vk_session, timeout=30)
 
