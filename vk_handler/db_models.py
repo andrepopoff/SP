@@ -49,4 +49,24 @@ class StopAlbum(Base, DBConnection):
         return 'StopAlbum({}, {}, {})'.format(self.name, self.link, self.pre_order)
 
 
+class PaymentInfo(Base, DBConnection):
+    __tablename__ = 'payment_info'
+    id = Column(Integer, primary_key=True)
+    first_msg = Column(Text(256))
+    recipient = Column(String(128))
+    card_number = Column(String(24))
+    card_type = Column(String(128))
+    end_msg = Column(Text(256))
+
+    def __init__(self, first_msg, recipient, card_number, card_type, end_msg):
+        self.first_msg = first_msg
+        self.recipient = recipient
+        self.card_number = card_number
+        self.card_type = card_type
+        self.end_msg = end_msg
+
+    def __repr__(self):
+        return 'PaymentInfo({}, {}, {}, {}, {})'.format(self.first_msg, self.recipient, self.card_number, self.card_type, self.end_msg)
+
+
 Base.metadata.create_all(engine)
