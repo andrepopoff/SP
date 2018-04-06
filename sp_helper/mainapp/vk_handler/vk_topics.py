@@ -1,6 +1,6 @@
 import vk
 import re
-from db_models import StopAlbum, db_session, TopicMessage, PaymentInfo
+from .db_models import StopAlbum, db_session, TopicMessage, PaymentInfo
 
 
 MY_USER_ID = '7978511'
@@ -8,16 +8,14 @@ APP_ID = '6273721'
 
 
 class VkHandler:
-    def __init__(self, my_user_id, app_id):
+    def __init__(self, my_user_id, app_id, login, password):
         self.__my_user_id = my_user_id
         self.__app_id = app_id
-
-        with open('pass.txt', 'r') as f:
-            self.__login, self.__password = [line.rstrip() for line in f]
-
+        self.__login = login
+        self.__password = password
         self.__vk_session = vk.AuthSession(app_id=APP_ID, user_login=self.__login, user_password=self.__password,
                                     scope='groups, photos')
-        self.__vk_api = vk.API(self.__vk_session, timeout=30)
+        self.__vk_api = vk.API(self.__vk_session, timeout=10)
 
     def create_first_topic_msg(self):
         # ----> Позже сделать на django формах
@@ -80,13 +78,17 @@ class VkHandler:
         pay_info.save_in_db()
 
     def get_all_album_comments(self):
-        comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
-        for i in comments['items']:
-            print(i)
+        # comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
+        # for i in comments['items']:
+        #     print(i)
+        return self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
 
 
 if __name__ == '__main__':
-    vk_handler = VkHandler(MY_USER_ID, APP_ID)
+    with open('pass.txt', 'r') as f:
+        login, password = [line.rstrip() for line in f]
+
+    vk_handler = VkHandler(MY_USER_ID, APP_ID, login, password)
     # vk_handler.add_payment_info_in_topic(37515920)
     # db_session.close()
     vk_handler.get_all_album_comments()
