@@ -78,10 +78,18 @@ class VkHandler:
         pay_info.save_in_db()
 
     def get_all_album_comments(self):
-        # comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
-        # for i in comments['items']:
-        #     print(i)
-        return self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
+        comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
+
+        for item in comments['items']:
+            if str(item['from_id'])[0] == '-':
+                user = self.__vk_api.groups.getById(v='5.0', group_id=str(item['from_id'])[1:], fields='photo_100')
+            else:
+                user = self.__vk_api.users.get(v='5.0', user_ids=item['from_id'], fields='photo_100')
+            photo = self.__vk_api.photos.getById(v='5.0', photos='{}_{}'.format(-47985581, item['pid']))
+            item['photo_info'] = photo
+            item['user_info'] = user
+
+        return comments
 
 
 if __name__ == '__main__':
@@ -91,4 +99,4 @@ if __name__ == '__main__':
     vk_handler = VkHandler(MY_USER_ID, APP_ID, login, password)
     # vk_handler.add_payment_info_in_topic(37515920)
     # db_session.close()
-    vk_handler.get_all_album_comments()
+    print(vk_handler.get_all_album_comments())
