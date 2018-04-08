@@ -7,7 +7,6 @@
       <img class="mr-3 col-3" src="{{ item.photo_info.0.photo_604 }}" alt="Фото товара">
       <div class="media-body col-6">
         {{ item.photo_info.0.text|linebreaks }}
-
         <div class="media mt-3">
           <a class="pr-3 col-3" href="#">
             <img src="{{ item.user_info.0.photo_100 }}" alt="Фото пользователя">
@@ -33,4 +32,9 @@
     </div>
     <hr>
   {% endfor %}
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 {% endblock %}
