@@ -6,8 +6,8 @@
     <div class="media">
       <img class="mr-3 col-3" src="{{ item.photo_info.0.photo_604 }}" alt="Фото товара">
       <div class="media-body col-6">
-        <h5 class="mt-0">Описание товара</h5>
-        {{ item.photo_info.0.text }}
+        <!-- <h5 class="mt-0">Описание товара</h5> -->
+        {{ item.photo_info.0.text|linebreaks }}
 
         <div class="media mt-3">
           <a class="pr-3 col-3" href="#">
@@ -25,8 +25,8 @@
       </div>
       <form>
         <div class="form-group">
-          <p>Цена: <input class="form-control" type="text" placeholder="Цена"></p>
-          <p>Кол-во: <input class="form-control" type="text" placeholder="Количество"></p>
+          <p>Цена: <input class="form-control" type="text" placeholder="{{ item.price }}"></p>
+          <p>Кол-во: <input class="form-control" type="text" placeholder="{{ item.count }}"></p>
         </div>
         <button type="submit" class="btn btn-primary">Верно</button>
       </form>

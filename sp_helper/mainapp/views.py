@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .vk_handler.vk_topics import VkHandler
 import os
+import re
 
 
 MY_USER_ID = '7978511'
