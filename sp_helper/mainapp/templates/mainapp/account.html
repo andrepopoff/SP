@@ -6,7 +6,6 @@
     <div class="media">
       <img class="mr-3 col-3" src="{{ item.photo_info.0.photo_604 }}" alt="Фото товара">
       <div class="media-body col-6">
-        <!-- <h5 class="mt-0">Описание товара</h5> -->
         {{ item.photo_info.0.text|linebreaks }}
 
         <div class="media mt-3">
@@ -21,6 +20,7 @@
             {% endif %}
             {{ item.text }}
           </div>
+          <button type="button" class="btn btn-danger">Не заказ</button>
         </div>
       </div>
       <form>
