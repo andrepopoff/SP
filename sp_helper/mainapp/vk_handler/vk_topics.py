@@ -79,10 +79,10 @@ class VkHandler:
 
     def get_all_album_comments(self):
         comments = self.__vk_api.photos.getAllComments(v='5.0', owner_id=-47985581, album_id=238502941, offset=0, count=100)
-        price_pattern1 = r'(?P<price>\d+)\sруб[\.\s]+'
-        price_pattern2 = r'(?P<price>\d+)\sр[\.\s]+'
-        price_pattern3 = r'(?P<price>\d+)руб[\.\s]+'
-        price_pattern4 = r'(?P<price>\d+)р[\.\s]+'
+        price_pattern1 = r'(?P<price>\d+)\sруб[\.\s\n]+'
+        price_pattern2 = r'(?P<price>\d+)\sр[\.\s\n]+'
+        price_pattern3 = r'(?P<price>\d+)руб[\.\s\n]+'
+        price_pattern4 = r'(?P<price>\d+)р[\.\s\n]+'
         count_pattern = r'^\+(?P<count>\d+)'
 
         for item in comments['items']:
